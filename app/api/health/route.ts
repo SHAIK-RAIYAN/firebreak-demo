@@ -22,7 +22,7 @@ export async function GET() {
   const sha = process.env.VERCEL_GIT_COMMIT_SHA ?? "local";
   try {
     const q = quote(SAMPLE, { percent: 10 });
-    if (q.totalCents !== 6120) throw new Error(Pricing invariant failed: expected 6120, got );
+    if (q.totalCents !== 6120) throw new Error(`Pricing invariant failed: expected 6120, got ${q.totalCents}`);
     return NextResponse.json({ ok: true, sha, checks: { pricing: "ok" } });
   } catch (err) {
     const e = err instanceof Error ? err : new Error(String(err));
