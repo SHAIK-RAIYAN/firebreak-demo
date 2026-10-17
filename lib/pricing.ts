@@ -1,4 +1,4 @@
-// demo run 20261017151754
+// demo run 20261017152729
 export type LineItem = { sku: string; unitPriceCents: number; quantity: number };
 
 export function subtotalCents(items: LineItem[]): number {
@@ -7,10 +7,8 @@ export function subtotalCents(items: LineItem[]): number {
 
 export function applyDiscount(totalCents: number, discount?: { percent: number }): number {
   if (!discount) return totalCents;
-  // BUG: assumes `discount.stack` always exists (it does not)
-  const stacked = (discount as unknown as { stack: { percent: number }[] }).stack;
-  const pct = stacked.reduce((acc, d) => acc + d.percent, discount.percent);
-  return Math.round(totalCents * (1 - Math.min(pct, 100) / 100));
+  const pct = Math.min(Math.max(discount.percent, 0), 100);
+  return Math.round(totalCents * (1 - pct / 100));
 }
 
 export function quote(items: LineItem[], discount?: { percent: number }) {
